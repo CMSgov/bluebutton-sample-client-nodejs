@@ -17,7 +17,7 @@ app.locals.siteName = "BlueButton OAuth Node.js Sample Client Application";
 // remote urls
 app.locals.rurl = {
 	'eob' : serverAuth.credentials.auth.tokenHost + '/v1/fhir/ExplanationOfBenefit',
-	'patient' : serverAuth.credentials.auth.tokenHost + '/v1/fhir/Patient/foo',
+	'patient' : serverAuth.credentials.auth.tokenHost + '/v1/fhir/Patient',
 	'coverage' : serverAuth.credentials.auth.tokenHost + '/v1/fhir/Coverage',
 	'register' : serverAuth.credentials.auth.tokenHost + '/v1/o/applications/register/',
 	'sandbox' : serverAuth.credentials.auth.tokenHost,
@@ -29,7 +29,7 @@ app.locals.ep = {
 	'action' : '/action',
 	'authapp' : '/authapp',
 	'fetch' : '/fetch',
-	'help' : '/readme',
+	'help' : '/help',
 	'homepage' : '/',
 	'redirect' : '/redirect',
 	'refresh' : '/refresh',
@@ -156,7 +156,7 @@ app.get(app.locals.ep.redirect, (req,res) => {
 /**
  * Renders help information to the clients browser
  */
-app.get(app.locals.ep.help, (req, res) => res.render('readme'));
+app.get(app.locals.ep.help, (req, res) => res.render('help'));
 
 /**
  * Home page for application

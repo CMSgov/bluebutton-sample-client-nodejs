@@ -1,6 +1,9 @@
 node_modules/
 /.metadata/
 
+# ignore persist data
+.node-persist/
+
 # registered application server credentials should not be placed in git
 serverAuth.js
 
