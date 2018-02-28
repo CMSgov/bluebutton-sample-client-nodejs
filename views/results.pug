@@ -1,0 +1,15 @@
+extends layout.pug
+
+
+block append content
+	.container
+		h3 <span class='text-success'>Successfully connected to #{url} using the following:</span>
+		-var noPrompt = true 
+		include token.pug
+		h3 <span class='text-info'>Response:</span>
+		p 
+		span(class='text-info') #{JSON.stringify(data, null, br)}
+		p
+		a(class='btn btn-primary btn-success' href=ep.action) Try Another
+		|&nbsp;
+		a(class='btn btn-primary btn-success' href=ep.homepage) Done

@@ -1,0 +1,11 @@
+extends layout.pug
+
+block append content	
+	.container
+		if(moreinfo)
+			h3 <span class='text-info'>#{moreinfo}</span>
+			
+		if(token)
+			include token.pug
+		else
+			a(class='btn btn-primary btn-lg btn-success' href=ep.authapp) Authorize #{siteName} Now	

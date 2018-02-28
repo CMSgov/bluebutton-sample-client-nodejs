@@ -1,0 +1,21 @@
+extends layout.pug
+
+block append content
+	.container
+		if(moreinfo)
+			h3 <span class='text-info'>#{moreinfo}</span>
+			
+		h3 Here is the token I have:
+	
+		-var noPrompt = true
+		include token.pug
+
+		h3 Lets do something with it...
+		p
+		a(class='btn btn-primary btn-info' href='fetch?url=' + rurl.eob) Fetch EOB
+		|&nbsp;
+		a(class='btn btn-primary btn-info' href='fetch?url=' + rurl.patient) Fetch Patient
+		|&nbsp;
+		a(class='btn btn-primary btn-info' href='fetch?url=' + rurl.coverage) Fetch Coverage
+		p
+		a(class='btn btn-primary btn-warning' href=ep.refresh) Refresh Token

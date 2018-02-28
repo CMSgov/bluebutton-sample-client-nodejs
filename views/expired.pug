@@ -1,0 +1,13 @@
+extends layout.pug
+
+block append content
+	.container
+		h3 <span class='text-danger'>Token has expired!</span>	
+		-var noPrompt = true
+		include token.pug
+		h3 Would you like to refresh it?
+		p
+			a(class='btn btn-primary btn-success' href=ep.refresh) Yes
+			|&nbsp;
+			a(class='btn btn-primary btn-danger' href=ep.reset) No
+		br

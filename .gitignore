@@ -1,0 +1,11 @@
+node_modules/
+/.metadata/
+
+# registered application server credentials should not be placed in git
+serverAuth.js
+
+# Ignore OSX system files
+.DS_Store
+
+# Ignore Eclipse temp files
+RemoteSystemsTempFiles

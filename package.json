@@ -1,0 +1,24 @@
+{
+  "name": "bluebutton-sample-client-nodejs",
+  "version": "1.0.0",
+  "description": "This application demonstrates how to connect to the BlueButton Sandbox using an OAuth client token and retrieve patient data from the server using a secured connection.",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:CMSgov/bluebutton-sample-client-nodejs.git"
+  },
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Brian Glover",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.18.0",
+    "express": "^4.16.2",
+    "jstransformer-markdown-it": "^2.0.0",
+    "node-persist": "^2.1.0",
+    "pug": "^2.0.0-rc.4",
+    "simple-oauth2": "^1.5.0"
+  }
+}

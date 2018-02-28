@@ -1,0 +1,7 @@
+extends layout.pug
+
+block append content
+	.container
+		include:markdown-it ../README.md
+		
+		a(class='btn btn-primary btn-success' href=ep.homepage) Done

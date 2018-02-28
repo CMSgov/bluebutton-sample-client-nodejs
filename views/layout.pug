@@ -1,0 +1,24 @@
+include mixins.pug
++nav("Welcome")
+	+nav_item( ep.homepage ) Home
+	+nav_item( ep.help ) Help
+
+html
+	block head
+		title #{siteName}
+		meta( charset='utf-8' )
+		meta( http-equiv='X-UA-Compatible', content='IE=edge' )
+		meta( name='viewport', content='width=device-width, initial-scale=1.0' )
+		meta( name='description', content=siteName )
+		// Theme
+		link(href="//maxcdn.bootstrapcdn.com/bootswatch/3.3.1/slate/bootstrap.min.css", rel="stylesheet")
+	body(style="padding-bottom:10rem;")
+		block scripts
+			script( src='//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js' )
+			script( src='//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js' )
+		block content
+			.container
+				.jumbotron
+					script( src='//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js' )
+					script( src='//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js' )
+					h2 #{siteName}

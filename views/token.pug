@@ -1,0 +1,24 @@
+h3 <span class='text-warning'>OAuth token:</span>
+p
+	span(class='text-warning') access_token: #{token.access_token}	
+	br
+	span(class='text-warning') scope: #{token.scope}
+	br
+	span(class='text-warning') patient: #{token.patient}
+	br
+	span(class='text-warning') refresh_token: #{token.refresh_token}
+	br
+	span(class='text-warning') expires_in: #{token.expires_in}
+	br
+	span(class='text-warning') token_type: #{token.token_type}
+	br
+	span(class='text-warning') expires_at: #{token.expires_at}
+
+unless noPrompt	
+	h3 Would you like to use it?
+	br
+	p
+		a(class='btn btn-primary btn-success' href=ep.action) Yes
+		|&nbsp; 
+		a(class='btn btn-primary btn-danger' href=ep.reset) No
+	br

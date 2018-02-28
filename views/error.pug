@@ -1,0 +1,19 @@
+extends layout.pug
+
+block append content
+	.container
+		h2 <span class='text-danger'>#{title}</span>
+		h3 <span class='text-danger'>#{error}</span>
+		p 
+			|Have you registered this client application at the
+			|#[a(href=rurl.sandbox)= 'CMS Blue Button Developer Preview site']
+			|and placed the client id and secret in serverAuth.js?
+		p
+			|If not, you can register this client application at the
+			|#[a(href=rurl.register)= 'CMS Blue Button Developer Preview New Application Registration Page'].
+		p
+			|If the application is registered, has the client token been revoked?
+			|Check your Application Token status
+			|#[a(href=rurl.tokens)= 'CMS Blue Button Developer Preview Registered Applications Page'].
+		br
+		a(class='btn btn-primary btn-success' href=ep.homepage) Done
