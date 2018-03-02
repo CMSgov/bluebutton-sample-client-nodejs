@@ -11,11 +11,23 @@ block append content
 		include token.pug
 
 		h3 Lets do something with it...
+		
+		h3 Raw JSON Actions
 		p
 		a(class='btn btn-primary btn-info' href='fetch?url=' + rurl.eob) Fetch EOB
 		|&nbsp;
 		a(class='btn btn-primary btn-info' href='fetch?url=' + rurl.patient) Fetch Patient
 		|&nbsp;
 		a(class='btn btn-primary btn-info' href='fetch?url=' + rurl.coverage) Fetch Coverage
+		
+		h3 Post-processed Actions
+		p
+		a(class='btn btn-primary btn-info' href='fetch?url=' + rurl.eob + '&action=extensions') Fetch Extension Records
+		|&nbsp;
+		a(class='btn btn-primary btn-info' href='fetch?url=' + rurl.patient + '&action=patientTable') Formatted Patient Record
+		
+		h3 Token Actions
 		p
 		a(class='btn btn-primary btn-warning' href=ep.refresh) Refresh Token
+		
+		

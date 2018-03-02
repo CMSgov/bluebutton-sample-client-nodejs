@@ -19,6 +19,8 @@
     "jstransformer-markdown-it": "^2.0.0",
     "node-persist": "^2.1.0",
     "pug": "^2.0.0-rc.4",
-    "simple-oauth2": "^1.5.0"
+    "simple-oauth2": "^1.5.0",
+    "table-builder": "^2.1.1",
+    "traverse": "^0.6.6"
   }
 }

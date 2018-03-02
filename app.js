@@ -119,6 +119,96 @@ function hasToken(req, res, next) {
 		next();
 	}
 }
+
+function createExtensionsTable(json) {
+	var headers = {system : 'System', code : 'Code', display : 'Display'};
+	var data = [];
+
+	var traverse = require('traverse');
+
+	// go find the extension codings we are interested in
+	traverse(json).forEach(function(node) {
+		if(typeof this.node === 'object') {
+			var entry = {system:'undefined',code:'undefined',display:'undefined'};
+			var path, value;
+			
+			switch(this.key) {
+			case 'valueCoding':	
+				// retrieve system element from node
+				path = this.path.concat('system');
+				value = traverse(json).get(path);
+				if(value !== undefined) {
+					entry.system = value.toString();
+				}
+				// retrieve code element for node
+				path = this.path.concat('code');
+				value = traverse(json).get(path);
+				if(value !== undefined) {
+					entry.code = value.toString();
+				}
+				// retrieve display element for node
+				path = this.path.concat('display');
+				value = traverse(json).get(path);
+				if(value !== undefined) {
+					entry.display = value.toString();
+				}
+				// add entry to table data
+				data.push(entry);
+				break;
+				
+			case 'valueIdentifier':	
+				// retrieve system element from node
+				path = this.path.concat('system');
+				value = traverse(json).get(path);
+				if(value !== undefined) {
+					entry.system = value.toString();
+				}
+				// retrieve value element for node
+				path = this.path.concat('value');
+				value = traverse(json).get(path);
+				if(value !== undefined) {
+					entry.code = value.toString();
+				}
+				// add entry to table data
+				data.push(entry);
+				break;
+			default:
+				break;
+			}
+		}
+	});
+	
+	var TableBuilder = require('table-builder');
+	var html = (new TableBuilder({class: 'table table-hover'}))
+		.setHeaders(headers)
+		.setData(data)
+		.render();
+	
+	console.log(html);
+	return html;
+}
+function createPatientTable(json) {
+	var headers = {key : 'Key', value : 'Value'};
+	var data = [
+		{ key : 'Patient ID', value : json.id },
+		{ key : 'Name', value : json.name[0].given[0] + ' ' + json.name[0].family },
+		{ key : 'Gender', value : json.gender },
+		{ key : 'District', value : json.address[0].district },
+		{ key : 'State', value : json.address[0].state },
+		{ key : 'Postal Code', value : json.address[0].postalCode }
+	];
+	console.log(data);
+	 
+	var TableBuilder = require('table-builder');
+	var html = (new TableBuilder({class: 'table table-hover'}))
+		.setHeaders(headers)
+		.setData(data)
+		.render();
+
+	console.log(html);
+	return html;
+}
+
 /**
  * Redirects to the remote server's URI to get permission for this application to access user information
  */
@@ -236,10 +326,12 @@ app.get(app.locals.ep.reset, (req,res) => {
 });
 
 /**
- * Query the server for user data using the requests url paramater as the endpoint
+ * Query the server for user data using the requests url parameter as the endpoint
  */
 app.get(app.locals.ep.fetch, hasToken, (req,res) => {
 	var url = req.query.url;
+	var action = req.query.action;
+	console.log('Action = ' + action);
 	// make sure url exists
 	if (url === undefined) {	
 		render_error(res, 'Fetch Error:', 'URL was not specified');
@@ -254,12 +346,48 @@ app.get(app.locals.ep.fetch, hasToken, (req,res) => {
 	axios
 	  .get(url)
 	  .then(response => {
-	    console.log(JSON.stringify(response.data.entry, null, 2));
-	    res.render('results', {
-	    		token: tokenObject.token,
-	    		url: url,
-	    		data: response.data.entry
-	    });
+		console.log(JSON.stringify(response.data.entry[0], null, 2));
+		
+	    var results, html, table;
+	    switch(action) {
+	    case 'patientTable':
+	    		if(response.data.entry[0].resource !== undefined) {
+		    		html = '<h2>Here is your Patient Information</h2>';
+		    		table = createPatientTable(response.data.entry[0].resource);
+	    		}
+	    		else {
+	    			html = '<h2>No patient record found!</h2>';
+	    		}
+	    		// render results
+			res.render('results', {
+				customHtml: html + table
+			});
+	    		break;
+	    		
+	    case 'extensions':
+	    		console.log(JSON.stringify(response.data.entry[0].resource.extension, null, 2));
+	    		if(response.data.entry[0].resource.extension !== undefined) {
+		    		html = '<h2>Here are your extension codings</h2>';
+		    		table = createExtensionsTable(response.data.entry[0].resource.extension);
+	    		}
+	    		else {
+	    			html = '<h2>No extension codings found!</h2>';
+	    		}
+	    		// render results
+	    		res.render('results', {
+	    			customHtml: html + table
+	    		});
+	    		break;
+    		default:
+    			res.render('results', {
+    				token: tokenObject.token,
+    				url: url,
+    				json: response.data.entry[0]
+    			});
+    			break;
+	    }
+
+
 	  })
 	  .catch(error => {
 		  render_error(res, 'Cannot Fetch ' + url + '!', error);
