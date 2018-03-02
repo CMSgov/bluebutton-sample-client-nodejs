@@ -34,4 +34,4 @@ Before running the application a **serverAuth.js** file must be created within t
 **ATTENTION:** Be sure to replace the credentials.client.id and credentials.client.secret fields above with the values recorded from the previous registration step and save the file in Eclipse.
 
 ## Start Application
-Once all the prerequisites are satisfied the application can be run from Eclipse by simply right-clicking on the app.js file in the workspace and select Run As -> Node.js Application.  This will launch a local server on port 8001.  Using your favorite browser, navigate to [http://localhost:8001](http://localhost:8001) to test the application out.
+Once all the prerequisites are satisfied the application can be run from Eclipse by simply right-clicking on the app.js file in the workspace and select *Run As -> Node.js Application*.  This will launch a local server on port 8001.  Using your favorite browser, navigate to [http://localhost:8001](http://localhost:8001) to test the application out.
