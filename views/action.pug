@@ -22,10 +22,11 @@ block append content
 		
 		h3 Post-processed Actions
 		p
-		a(class='btn btn-primary btn-info' href='fetch?url=' + rurl.eob + '&action=extensions') Fetch Extension Records
+		a(class='btn btn-primary btn-info' href='fetch?url=' + rurl.eob + '&action=valueCodings') Fetch Value Codings
 		|&nbsp;
-		a(class='btn btn-primary btn-info' href='fetch?url=' + rurl.patient + '&action=patientTable') Formatted Patient Record
-		
+		a(class='btn btn-primary btn-info' href='fetch?url=' + rurl.patient + '&action=patientRecord') Fetch Patient Record
+		|&nbsp;
+		a(class='btn btn-primary btn-info' href='fetch?url=' + rurl.eob + '&action=benefitBalance') Fetch Benefit Balances
 		h3 Token Actions
 		p
 		a(class='btn btn-primary btn-warning' href=ep.refresh) Refresh Token
