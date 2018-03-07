@@ -12,7 +12,10 @@ app.set("view engine", "pug");
 app.set("views", path.join(__dirname, "views"));
 app.set("includes", __dirname);
 
-// app.locals are variables that are shared between javascript and pug resources
+/**
+ * app.locals are variables that are shared between javascript and pug resources
+ */
+
 // site name
 app.locals.siteName = "BlueButton OAuth Node.js Sample Client Application";
 
@@ -26,7 +29,7 @@ app.locals.rurl = {
 	'tokens' : serverAuth.credentials.auth.tokenHost + '/v1/o/authorized_tokens/'
 };
 
-//configure application endpoints
+// configure application server endpoints
 app.locals.ep = {
 	'action' : '/action',
 	'authapp' : '/authapp',
@@ -282,8 +285,6 @@ app.get(app.locals.ep.fetch, hasToken, (req,res) => {
     			});
     			break;
 	    }
-
-
 	  })
 	  .catch(error => {
 		  render_error(res, 'Cannot Fetch ' + url + '!', error);

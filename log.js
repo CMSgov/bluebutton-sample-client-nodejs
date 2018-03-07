@@ -1,4 +1,8 @@
-const Log = require('log');
+const winston = require('winston');
 
 // export a log instance
-module.exports = new Log('debug');
+module.exports = new winston.Logger({
+    level: 'info',
+    transports: [
+      new (winston.transports.Console)()
+    ]});
