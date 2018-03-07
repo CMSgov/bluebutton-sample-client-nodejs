@@ -1,18 +1,17 @@
-const express = require('express');
 const axios = require("axios");
+const express = require('express'), app = express();
+const Helpers = require('./helpers.js'), helpers = new Helpers();
+const Log = require('log'), logger = new Log('debug');
 const path = require('path');
 const serverAuth = require('./serverAuth.js');
-const Helpers = require('./helpers.js');
-const helpers = new Helpers();
+const Token = require('./token.js'), token = new Token();
 
 // init the express application
-const app = express();
 app.set("view engine", "pug");
 app.set("views", path.join(__dirname, "views"));
 app.set("includes", __dirname);
 
-// Variables shared between javascript and pug resources
-
+// app.locals are variables that are shared between javascript and pug resources
 // site name
 app.locals.siteName = "BlueButton OAuth Node.js Sample Client Application";
 
@@ -44,14 +43,6 @@ const appPort = '8001';
 const appUri = appUrl + ':' + appPort;
 const appRedirectUri = appUri + '/redirect';
 
-// init persistence storage
-var storage = require('node-persist');
-
-storage.initSync({
-	stringify: JSON.stringify,
-    parse: JSON.parse,
-    encoding: 'utf8'});
-
 // Initialize the OAuth2 Library
 const oauth2 = require('simple-oauth2').create(serverAuth.credentials);
 
@@ -61,32 +52,7 @@ const authorizationUri = oauth2.authorizationCode.authorizeURL({
     state: '<state>'
 });
 
-var tokenObject;
 
-/**
- * Stores a token to local storage
- *
- * @param tokenObject the token object to store
- */
-function store_token(tokenObject)
-{
-    console.log("Store Access token = " + JSON.stringify(tokenObject.token, null, 2));
-    
-    // persist token
-    storage.setItemSync('token', tokenObject.token);
-}
-
-/**
- * Loads an OAuth token from local storage
- *
- * @returns token data as a string
- */
-function load_token()
-{
-	var tokenData = storage.getItemSync('token');
-	console.log("Load Access token = " + JSON.stringify(tokenData, null, 2));
-	return tokenData;
-}
 
 /**
  * Renders an error page with the specified text and information
@@ -96,7 +62,7 @@ function load_token()
  * @param error the details of the error to display
  */
 function render_error(res, title, error) {
-	console.log(title, error);
+	logger.error(title, error);
 	
 	res.render('error', {
 		title: title,
@@ -112,7 +78,7 @@ function render_error(res, title, error) {
  * @param next the next to use
  */
 function hasToken(req, res, next) {
-	if(tokenObject === undefined) {
+	if(token.object === undefined) {
 		render_error(res, 'Session Error: a valid token has not been loaded!', 
 			'This can happen if the application server is stopped and restarted and a URL other than the home page is visited.  ' +
 			'Click Done below to clear this error and acquire a valid token for this session.');
@@ -140,14 +106,14 @@ app.get(app.locals.ep.redirect, (req,res) => {
     // Save the access token
     oauth2.authorizationCode.getToken(tokenConfig)
     		.then(result => {
-    			tokenObject = oauth2.accessToken.create(result);
+    			token.object = oauth2.accessToken.create(result);
     			
     			// persist token
-    			store_token(tokenObject);
+    			token.store();
     	
     			// render the authpass page
     	        res.render('authpass', {
-    	    			token: tokenObject.token
+    	    			token: token.json
     	        });
     		})
     		.catch(error => {
@@ -165,14 +131,14 @@ app.get(app.locals.ep.help, (req, res) => res.render('help'));
  */
 app.get(app.locals.ep.homepage, (req, res) => {
 	// create access token object from persist data
-	var tokenData = load_token();
+	var tokenData = token.load();
 	if (tokenData !== undefined) {
-		tokenObject = oauth2.accessToken.create(tokenData);
+		token.object = oauth2.accessToken.create(tokenData);
 		
-		if (tokenObject.expired()) {
+		if (token.object.expired()) {
 			// render the expired page
 			res.render('expired', {
-				token: tokenObject.token
+				token: token.json
 			});
 			return;
 		}
@@ -180,7 +146,7 @@ app.get(app.locals.ep.homepage, (req, res) => {
 			// render default home page
 			res.render('index', {
 				moreinfo: 'I found an OAuth token in local storage!',
-				token: tokenObject.token
+				token: token.json
 			});
 			return;
 		}
@@ -196,11 +162,11 @@ app.get(app.locals.ep.homepage, (req, res) => {
  * Render an action page that uses the token in various ways
  */
 app.get(app.locals.ep.action, hasToken, (req, res) => {	
-	console.log("Access token = " + JSON.stringify(tokenObject.token, null, 2));
+	logger.info("Access token = " + JSON.stringify(token.json, null, 2));
 	
 	// render action page
 	res.render('action', {
-		token: tokenObject.token
+		token: token.json
 	});
 });
 
@@ -209,17 +175,17 @@ app.get(app.locals.ep.action, hasToken, (req, res) => {
  */
 app.get(app.locals.ep.refresh, hasToken, (req, res) => {
 	// attempt to refresh the token
-	tokenObject.refresh()
+	token.object.refresh()
 	  .then(result => {
-		  tokenObject = result;
+		  token.object = result;
 
 		  // persist token
-		  store_token(tokenObject);
+		  token.store();
 		  
 		  // render the action page
 		  res.render('action', {
 			  moreinfo: 'The token has been refreshed!',
-			  token: tokenObject.token
+			  token: token.json
 		  });
 	  })
 	  .catch(error => {
@@ -231,9 +197,8 @@ app.get(app.locals.ep.refresh, hasToken, (req, res) => {
  * Resets the application state by deleting the stored token
  */
 app.get(app.locals.ep.reset, (req,res) => {
-	console.log('Remove Access Token');
-	storage.removeItemSync('token');
-	tokenObject = undefined;
+	// remove the token
+	token.remove();
 	// render home page
 	res.redirect(app.locals.ep.homepage);
 });
@@ -244,40 +209,43 @@ app.get(app.locals.ep.reset, (req,res) => {
 app.get(app.locals.ep.fetch, hasToken, (req,res) => {
 	var url = req.query.url;
 	var action = req.query.action;
-	console.log('Action = ' + action);
-	// make sure url exists
+	logger.debug('Action = ' + action);
+	
+	// make sure the url exists
 	if (url === undefined) {	
 		render_error(res, 'Fetch Error:', 'URL was not specified');
 		return;
 	}
 
-	console.log("Access token = " + JSON.stringify(tokenObject.token, null, 2));
+	logger.debug("Access token = " + JSON.stringify(token.json, null, 2));
+	
 	// setup authorization header to use OAuth token
-	axios.defaults.headers.common.authorization = `Bearer ` + tokenObject.token.access_token;
+	axios.defaults.headers.common.authorization = `Bearer ` + token.accessToken;
 	
 	// use axios to retrieve the specified URL
 	axios
 	  .get(url)
 	  .then(response => {
-		console.log(JSON.stringify(response.data.entry[0], null, 2));
 		var json = response.data.entry[0];
 		var resource = json.resource;
 	    var results, html, table;
 	    
+	    logger.debug(JSON.stringify(json, null, 2));
+	    
 	    switch(action) {
 	    case 'benefitBalance':
-    		if(resource !== undefined) {
-	    		html = '<h2>Here is your Benefit Balance Information</h2>';
-	    		table = helpers.createBenefitBalanceRecord(resource);
-    		}
-    		else {
-    			html = '<h2>No benefit balance records found!</h2>';
-    		}
-    		// render results
-		res.render('results', {
-			customHtml: html + table
-		});
-    		break;
+	    		if(resource !== undefined) {
+		    		html = '<h2>Here is your Benefit Balance Information</h2>';
+		    		table = helpers.createBenefitBalanceRecord(resource);
+	    		}
+	    		else {
+	    			html = '<h2>No benefit balance records found!</h2>';
+	    		}
+	    		// render results
+			res.render('results', {
+				customHtml: html + table
+			});
+	    		break;
     		
 	    case 'patientRecord':
 	    		if(resource !== undefined) {
@@ -309,7 +277,7 @@ app.get(app.locals.ep.fetch, hasToken, (req,res) => {
 	    		
     		default:
     			res.render('results', {
-    				token: tokenObject.token,
+    				token: token.json,
     				url: url,
     				json: json
     			});
@@ -324,4 +292,4 @@ app.get(app.locals.ep.fetch, hasToken, (req,res) => {
 });
 
 // start the application listening
-app.listen(appPort, () => console.log('The ' + app.locals.siteName + ' has been successfully started!\nVisit ' + appUri + ' in your favorite browser to try it out...'));
+app.listen(appPort, () => logger.info('The ' + app.locals.siteName + ' has been successfully started!\nVisit ' + appUri + ' in your favorite browser to try it out...'));
