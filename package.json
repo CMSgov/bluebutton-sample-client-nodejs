@@ -10,7 +10,7 @@
   "scripts": {
     "start": "node app.js",
     "lint": "echo '=> linting' && jshint *.js",
-    "test": "echo => 'testing' && mocha test/",
+    "test": "echo '=> testing' && mocha test/",
     "pretest": "npm run lint -s"
   },
   "author": "Brian Glover",
