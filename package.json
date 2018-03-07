@@ -9,7 +9,7 @@
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo => 'testing' && mocha test/"
   },
   "author": "Brian Glover",
   "license": "ISC",
@@ -17,11 +17,16 @@
     "axios": "^0.18.0",
     "express": "^4.16.2",
     "jstransformer-markdown-it": "^2.0.0",
+    "log": "^1.4.0",
     "node-persist": "^2.1.0",
     "pug": "^2.0.0-rc.4",
     "simple-oauth2": "^1.5.0",
     "sprintf-js": "^1.1.1",
     "table-builder": "^2.1.1",
     "traverse": "^0.6.6"
+  },
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "mocha": "^5.0.2"
   }
 }

@@ -1,17 +1,16 @@
-'use strict';
+'use strict'; // required for the class syntax used below to work
 
-const Log = require('log'), logger = new Log('debug');
+const logger = require('./log.js');
 
 /**
  * Token Class
  * 
- * Contains several methods that manages an oauth token
- */
-
-/**
- * Helpers Constructor
+ * Contains several methods that manage an OAuth token object
  */
 class Token {
+	/**
+	 * Constructor
+	 */
 	constructor() {
 	  this.name = 'Token';
 	  this._tokenObject = undefined;
@@ -24,7 +23,9 @@ class Token {
 		    encoding: 'utf8'});
 	}
 
-	// getters and setters
+	/**
+	 * getters and setters
+	 */
 	get object() { return this._tokenObject; }
 	set object(tobj) { this._tokenObject = tobj; }
 	get accessToken() { 
@@ -71,5 +72,6 @@ class Token {
 		this._tokenObject = undefined;
 	}
 }
-//export the class
-module.exports = Token;
+
+// export a Token instance
+module.exports = new Token();

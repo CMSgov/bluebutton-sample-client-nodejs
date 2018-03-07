@@ -1,21 +1,20 @@
-'use strict';
+'use strict'; // required for the class syntax used below to work
 
 const traverse = require('traverse');
 const sprintf = require('sprintf-js').sprintf;
-const Log = require('log'), logger = new Log('debug');
+const logger = require('./log.js');
 
 /**
- * Helpers Class
+ * Action Class
  * 
- * Contains several methods that help in the finding of nodes in large JSON objects and the formatting of certain data into HTML
+ * Contains several methods that perform 'Action' on JSON objects like retrieving a record from JSON and formatting it into HTML that can be displayed in a browser
  */
-
-/**
- * Helpers Constructor
- */
-class Helpers {
+class Action {
+	/**
+	 * Constructor
+	 */
 	constructor() {
-		this.name = 'Helpers';
+		this.name = 'Action';
 	}
 
 	/**
@@ -25,7 +24,7 @@ class Helpers {
 	 * @param name the name we are looking for
 	 * @returns a list of found items, empty list if none found
 	 */
-	findNodes(json, name) {
+	_findNodes(json, name) {
 		var results = traverse(json).reduce(function (acc, x) {
 		    if (this.key === name) {
 		    		acc.push(x);
@@ -47,7 +46,7 @@ class Helpers {
 	
 		var nodes;
 		// A benefitBalance record is a bit complicated so find the financial node first
-		if((nodes = this.findNodes(json, 'financial'))) {
+		if((nodes = this._findNodes(json, 'financial'))) {
 			// now you will have a list of financial objects...
 			nodes.forEach((nodelist) => {
 				var count = 0;
@@ -55,7 +54,7 @@ class Helpers {
 				nodelist.forEach((element) => {
 					var entry = {system:'undefined',code:'undefined',allowed:'undefined',currency:'undefined'};
 					// lookup the coding object for each financial object...
-					var coding = this.findNodes(element, 'coding');
+					var coding = this._findNodes(element, 'coding');
 					if(coding !== undefined) {
 						// the coding object is a list of objects...
 						coding.forEach((codelist) => {
@@ -70,7 +69,7 @@ class Helpers {
 							});
 						});
 					}
-					var allowedMoney = this.findNodes(element, 'allowedMoney');
+					var allowedMoney = this._findNodes(element, 'allowedMoney');
 					// lookup the allowedMoney for each financial object...
 					if(allowedMoney !== undefined) {
 						allowedMoney.forEach((item) => {
@@ -116,7 +115,7 @@ class Helpers {
 		var data = [];
 	
 		var nodes;
-		if((nodes = this.findNodes(json, 'valueCoding'))) {
+		if((nodes = this._findNodes(json, 'valueCoding'))) {
 			nodes.forEach((element) => {
 				data.push(element);
 			});
@@ -150,28 +149,28 @@ class Helpers {
 		var nodes;
 		
 		// fetch the nodes we are interested in displaying
-		if((nodes = this.findNodes(json, 'id'))) {
+		if((nodes = this._findNodes(json, 'id'))) {
 			data.push({ key:'Patient ID', value: nodes.join() });
 		}
-		if((nodes = this.findNodes(json, 'given'))) {
+		if((nodes = this._findNodes(json, 'given'))) {
 			data.push({ key:'First Name', value: nodes.join(" ") });
 		}
-		if((nodes = this.findNodes(json, 'family'))) {
+		if((nodes = this._findNodes(json, 'family'))) {
 			data.push({ key:'Last Name', value: nodes.join() });
 		}
-		if((nodes = this.findNodes(json, 'birthDate'))) {
+		if((nodes = this._findNodes(json, 'birthDate'))) {
 			data.push({ key:'Birth Date', value: nodes.join() });
 		}
-		if((nodes = this.findNodes(json, 'gender'))) {
+		if((nodes = this._findNodes(json, 'gender'))) {
 			data.push({ key:'Gender', value: nodes.join() });
 		}
-		if((nodes = this.findNodes(json, 'district'))) {
+		if((nodes = this._findNodes(json, 'district'))) {
 			data.push({ key:'District', value: nodes.join() });
 		}
-		if((nodes = this.findNodes(json, 'state'))) {
+		if((nodes = this._findNodes(json, 'state'))) {
 			data.push({ key:'State', value: nodes.join() });
 		}
-		if((nodes = this.findNodes(json, 'postalCode'))) {
+		if((nodes = this._findNodes(json, 'postalCode'))) {
 			data.push({ key:'Postal Code', value: nodes.join() });
 		}
 	
@@ -191,5 +190,5 @@ class Helpers {
 	}
 }
 
-//export the class
-module.exports = Helpers;
+// export an Action instance
+module.exports = new Action();

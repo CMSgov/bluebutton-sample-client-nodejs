@@ -1,10 +1,11 @@
+// import modules
+const action = require('./action.js');
 const axios = require("axios");
 const express = require('express'), app = express();
-const Helpers = require('./helpers.js'), helpers = new Helpers();
-const Log = require('log'), logger = new Log('debug');
+const logger = require('./log.js');
 const path = require('path');
 const serverAuth = require('./serverAuth.js');
-const Token = require('./token.js'), token = new Token();
+const token = require('./token.js');
 
 // init the express application
 app.set("view engine", "pug");
@@ -51,8 +52,6 @@ const authorizationUri = oauth2.authorizationCode.authorizeURL({
     redirect_uri: appRedirectUri,
     state: '<state>'
 });
-
-
 
 /**
  * Renders an error page with the specified text and information
@@ -236,7 +235,7 @@ app.get(app.locals.ep.fetch, hasToken, (req,res) => {
 	    case 'benefitBalance':
 	    		if(resource !== undefined) {
 		    		html = '<h2>Here is your Benefit Balance Information</h2>';
-		    		table = helpers.createBenefitBalanceRecord(resource);
+		    		table = action.createBenefitBalanceRecord(resource);
 	    		}
 	    		else {
 	    			html = '<h2>No benefit balance records found!</h2>';
@@ -250,7 +249,7 @@ app.get(app.locals.ep.fetch, hasToken, (req,res) => {
 	    case 'patientRecord':
 	    		if(resource !== undefined) {
 		    		html = '<h2>Here is your Patient Record</h2>';
-		    		table = helpers.createPatientRecord(resource);
+		    		table = action.createPatientRecord(resource);
 	    		}
 	    		else {
 	    			html = '<h2>No patient record found!</h2>';
@@ -264,7 +263,7 @@ app.get(app.locals.ep.fetch, hasToken, (req,res) => {
 	    case 'valueCodings':
 	    		if(resource !== undefined) {
 		    		html = '<h2>Here are your value codings</h2>';
-		    		table = helpers.createValueCodingRecord(resource);
+		    		table = action.createValueCodingRecord(resource);
 	    		}
 	    		else {
 	    			html = '<h2>No value codings found!</h2>';
