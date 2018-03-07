@@ -207,8 +207,8 @@ app.get(app.locals.ep.reset, (req,res) => {
  */
 app.get(app.locals.ep.fetch, hasToken, (req,res) => {
 	var url = req.query.url;
-	var action = req.query.action;
-	logger.debug('Action = ' + action);
+	var command = req.query.action;
+	logger.debug('Command = ' + command);
 	
 	// make sure the url exists
 	if (url === undefined) {	
@@ -231,7 +231,7 @@ app.get(app.locals.ep.fetch, hasToken, (req,res) => {
 	    
 	    logger.debug(JSON.stringify(json, null, 2));
 	    
-	    switch(action) {
+	    switch(command) {
 	    case 'benefitBalance':
 	    		if(resource !== undefined) {
 		    		html = '<h2>Here is your Benefit Balance Information</h2>';
