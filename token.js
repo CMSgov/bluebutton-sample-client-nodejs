@@ -16,11 +16,7 @@ class Token {
 	  this._tokenObject = undefined;
 	  
 	  // init persistence storage
-	  this.storage = require('node-persist');
-	  this.storage.initSync({
-			stringify: JSON.stringify,
-		    parse: JSON.parse,
-		    encoding: 'utf8'});
+	  this.storage = require('store');
 	}
 
 	/**
@@ -47,7 +43,7 @@ class Token {
 	    logger.debug("Store Access token = " + JSON.stringify(this._tokenObject.token, null, 2));
 	    
 	    // persist token
-	    this.storage.setItemSync('token', this._tokenObject.token);
+	    this.storage.set('token', this._tokenObject.token);
 	}
 	
 	/**
@@ -57,7 +53,7 @@ class Token {
 	 */
 	load()
 	{
-		var tokenData = this.storage.getItemSync('token');
+		var tokenData = this.storage.get('token');
 		logger.debug("Load Access token = " + JSON.stringify(tokenData, null, 2));
 		return tokenData;
 	}
@@ -68,7 +64,7 @@ class Token {
 	remove()
 	{
 		logger.debug('Remove Access Token');
-		this.storage.removeItemSync('token');
+		this.storage.remove('token');
 		this._tokenObject = undefined;
 	}
 }
