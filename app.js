@@ -1,11 +1,11 @@
 // import modules
-const action = require('./action.js');
+const Action = require('./action.js'), action = new Action();
 const axios = require("axios");
 const express = require('express'), app = express();
 const logger = require('./log.js');
 const path = require('path');
 const serverAuth = require('./serverAuth.js');
-const token = require('./token.js');
+const Token = require('./token.js'), token = new Token();
 
 // init the express application
 app.set("view engine", "pug");

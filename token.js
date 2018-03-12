@@ -40,10 +40,15 @@ class Token {
 	 */
 	store()
 	{
-	    logger.debug("Store Access token = " + JSON.stringify(this._tokenObject.token, null, 2));
-	    
-	    // persist token
-	    this.storage.set('token', this._tokenObject.token);
+		if(this._tokenObject !== undefined && this._tokenObject.token !== undefined) {
+		    logger.info("Store Access token = " + JSON.stringify(this._tokenObject.token, null, 2));
+		    
+		    // persist token
+		    this.storage.set('token', this._tokenObject.token);
+		}
+		else {
+			logger.warn("Store Access token failed: this._tokenObject.token undefined!");
+		}
 	}
 	
 	/**
@@ -54,7 +59,7 @@ class Token {
 	load()
 	{
 		var tokenData = this.storage.get('token');
-		logger.debug("Load Access token = " + JSON.stringify(tokenData, null, 2));
+		logger.info("Load Access token = " + JSON.stringify(tokenData, null, 2));
 		return tokenData;
 	}
 	
@@ -63,11 +68,11 @@ class Token {
 	 */
 	remove()
 	{
-		logger.debug('Remove Access Token');
+		logger.info('Removed Access Token');
 		this.storage.remove('token');
 		this._tokenObject = undefined;
 	}
 }
 
 // export a Token instance
-module.exports = new Token();
+module.exports = Token;

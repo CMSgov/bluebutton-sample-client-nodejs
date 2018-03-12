@@ -1,7 +1,7 @@
 /* global it, describe */
 
 const chai = require('chai'), assert = chai.assert;
-const action = require('../action.js');
+const Action = require('../action.js'), action = new Action();
 
 describe('Action Class Tests', function(){
 	describe('constructor', function(){

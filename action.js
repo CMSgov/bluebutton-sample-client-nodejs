@@ -191,4 +191,4 @@ class Action {
 }
 
 // export an Action instance
-module.exports = new Action();
+module.exports = Action;
