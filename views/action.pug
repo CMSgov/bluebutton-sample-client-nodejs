@@ -14,21 +14,21 @@ block append content
 		
 		h3 Raw JSON Actions
 		p
-		a(class='btn btn-primary btn-info' href='fetch?url=' + rurl.eob) Fetch EOB
+		a(class='btn btn-primary btn-info btn-lg' href='fetch?url=' + rurl.eob + '&action=listEobs') List EOB Records
 		|&nbsp;
-		a(class='btn btn-primary btn-info' href='fetch?url=' + rurl.patient) Fetch Patient
+		a(class='btn btn-primary btn-info btn-lg' href='fetch?url=' + rurl.patient) Fetch Patient Record
 		|&nbsp;
-		a(class='btn btn-primary btn-info' href='fetch?url=' + rurl.coverage) Fetch Coverage
+		a(class='btn btn-primary btn-info btn-lg' href='fetch?url=' + rurl.coverage) Fetch Coverage Record
 		
 		h3 Post-processed Actions
 		p
-		a(class='btn btn-primary btn-info' href='fetch?url=' + rurl.eob + '&action=valueCodings') Fetch Value Codings
+		a(class='btn btn-primary btn-info btn-lg' href='fetch?url=' + rurl.eob + '&action=valueCodings') Fetch Value Codings
 		|&nbsp;
-		a(class='btn btn-primary btn-info' href='fetch?url=' + rurl.patient + '&action=patientRecord') Fetch Patient Record
+		a(class='btn btn-primary btn-info btn-lg' href='fetch?url=' + rurl.patient + '&action=patientRecord') Format Patient Record
 		|&nbsp;
-		a(class='btn btn-primary btn-info' href='fetch?url=' + rurl.eob + '&action=benefitBalance') Fetch Benefit Balances
+		a(class='btn btn-primary btn-info btn-lg' href='fetch?url=' + rurl.eob + '&action=benefitBalance') Fetch Benefit Balances
 		h3 Token Actions
 		p
-		a(class='btn btn-primary btn-warning' href=ep.refresh) Refresh Token
+		a(class='btn btn-primary btn-warning btn-lg' href=ep.refresh) Refresh Token
 		
 		

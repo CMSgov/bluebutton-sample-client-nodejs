@@ -17,7 +17,7 @@ app.set("includes", __dirname);
  */
 
 // site name
-app.locals.siteName = "BlueButton OAuth Node.js Sample Client Application";
+app.locals.siteName = "Blue Button OAuth Node.js Sample Client Application";
 
 // remote urls
 app.locals.rurl = {
@@ -228,13 +228,27 @@ app.get(app.locals.ep.fetch, hasToken, (req,res) => {
 	axios
 	  .get(url)
 	  .then(response => {
-		var json = response.data.entry[0];
-		var resource = json.resource;
+		var data = response.data;
+		var links = data.link;
+		var entry = data.entry[0];
+		var resource = entry.resource;
 	    var results, html, table;
 	    
-	    logger.debug(JSON.stringify(json, null, 2));
+	    logger.debug(JSON.stringify(entry, null, 2));
 	    
 	    switch(command) {
+	    case 'listEobs':
+	    		var eobs;
+	    		if(links !== undefined) {
+	    			logger.debug(JSON.stringify(links, null, 2));
+	    			eobs = action.createEobDict(links);
+	    		}
+	    		// render results
+			res.render('eoblist', {
+				eobs: eobs
+			});
+	    		break;
+	    	
 	    case 'benefitBalance':
 	    		if(resource !== undefined) {
 		    		html = '<h2>Here is your Benefit Balance Information</h2>';
@@ -281,7 +295,7 @@ app.get(app.locals.ep.fetch, hasToken, (req,res) => {
     			res.render('results', {
     				token: token.json,
     				url: url,
-    				json: json
+    				json: entry
     			});
     			break;
 	    }

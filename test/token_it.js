@@ -7,7 +7,7 @@ describe('Token Class Tests', function(){
 	describe('constructor', function(){
 		it('should have a default name', function(){
 			const token = require('../token.js');
-			assert.typeOf(token.name, 'string');
+			assert.isString(token.name);
 			assert.equal(token.name, 'Token');
 		});
 	});

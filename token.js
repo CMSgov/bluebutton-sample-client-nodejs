@@ -41,7 +41,7 @@ class Token {
 	store()
 	{
 		if(this._tokenObject !== undefined && this._tokenObject.token !== undefined) {
-		    logger.info("Store Access token = " + JSON.stringify(this._tokenObject.token, null, 2));
+		    logger.debug("Store Access token = " + JSON.stringify(this._tokenObject.token, null, 2));
 		    
 		    // persist token
 		    this.storage.set('token', this._tokenObject.token);
@@ -59,7 +59,7 @@ class Token {
 	load()
 	{
 		var tokenData = this.storage.get('token');
-		logger.info("Load Access token = " + JSON.stringify(tokenData, null, 2));
+		logger.debug("Load Access token = " + JSON.stringify(tokenData, null, 2));
 		return tokenData;
 	}
 	
@@ -68,7 +68,7 @@ class Token {
 	 */
 	remove()
 	{
-		logger.info('Removed Access Token');
+		logger.debug('Removed Access Token');
 		this.storage.remove('token');
 		this._tokenObject = undefined;
 	}

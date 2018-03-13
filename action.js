@@ -35,6 +35,26 @@ class Action {
 	}
 
 	/**
+	 * Creates a dictionary of EOB names and links
+	 * 
+	 * @param json the json to parse into a dictionary
+	 * @returns dictionary of EOB links
+	 */
+	createEobDict(json) {
+		var data = {};
+	
+		var nodes, count=1;
+		if((nodes = this._findNodes(json, 'url'))) {
+			nodes.forEach((element) => {
+				data['Explanation of Benefit #' + count++] = element;
+			});
+		}
+
+		logger.debug(data);
+		return data;
+	}
+	
+	/**
 	 * Create HTML Benefit Balance Record from raw JSON data
 	 * 
 	 * @param json the json to parse into html

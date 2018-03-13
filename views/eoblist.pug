@@ -1,0 +1,18 @@
+extends layout.pug
+
+
+block append content
+	.container
+		if eobs
+			dl
+				dt 
+					h3 <span class='text-info'>Here are the Explanation of Benefits I found:</span>
+					br
+					each url,name in eobs
+						dd
+							a(class='btn btn-primary btn-warning btn-lg' href='fetch?url=' + url) #{name}
+							br
+							br
+		else
+			h3 <span class='text-info'>No Explanation of Benefit records found!:</span>
+			
