@@ -6,6 +6,19 @@ const logger = require('./log.js');
 const path = require('path');
 const serverAuth = require('./serverAuth.js');
 const Token = require('./token.js'), token = new Token();
+const argv = require('yargs')
+	.option('tunnel', {
+		alias: 't',
+		default: 'http://localhost',
+		describe: 'provide a secure tunnel for the app',
+	})
+	.option('port', {
+		alias: 'p',
+		default: 8001,
+		describe: 'provide port for app'	
+	})
+	.help()
+	.argv;
 
 // init the express application
 app.set("view engine", "pug");
@@ -42,9 +55,13 @@ app.locals.ep = {
 };
 
 // application variables
-const appUrl = 'http://localhost';
-const appPort = '8001';
-const appUri = appUrl + ':' + appPort;
+const appUrl = argv.tunnel;
+const appPort = argv.port;
+var appUri = appUrl + ':' + appPort;
+// if redirecting through a tunnel(i.e. ngrok) then reconfigure the app Uri, sans port
+if(appUrl !== 'http://localhost') {
+	appUri = appUrl;
+}
 const appRedirectUri = appUri + '/redirect';
 
 // Initialize the OAuth2 Library

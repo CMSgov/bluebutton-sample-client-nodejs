@@ -26,7 +26,8 @@
     "store": "^2.0.12",
     "table-builder": "^2.1.1",
     "traverse": "^0.6.6",
-    "winston": "^2.4.0"
+    "winston": "^2.4.0",
+    "yargs": "^11.0.0"
   },
   "devDependencies": {
     "chai": "^4.1.2",
