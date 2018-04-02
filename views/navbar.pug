@@ -23,10 +23,12 @@ mixin nav_item(href, style, active)
 
 	li(class=ddstyle): a( href=href ): block
 
-mixin nav_btn(name, href, style)
+mixin nav_btn_right(href, style)
 	- var bstyle = 'btn btn-primary ' + style
-	li
-		a(class=bstyle href=href) #{name}
+	.container
+		ul.nav.navbar-nav.navbar-right
+			li
+				a(class=bstyle href=href): block
 	
 mixin nav_item_dropdown(href, style, active)
 	- var ddstyle = style || ''

@@ -10,11 +10,11 @@ html
 		// Theme
 		link(href="//maxcdn.bootstrapcdn.com/bootswatch/3.3.7/slate/bootstrap.min.css", rel="stylesheet")
 	body(style="padding-bottom:10rem;")
-		+navbar('Welcome', inverse)
+		+navbar('Welcome')
 			+nav_item( ep.homepage ) Home
 			+nav_item( ep.help ) Help
 			if(token)
-				+nav_btn( 'Logout', ep.logout, 'btn-danger') 
+				+nav_btn_right( ep.logout, 'btn-danger') Logout
 		block scripts
 			script( src='//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js' )
 			script( src='//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js' )
