@@ -49,9 +49,9 @@ app.locals.ep = {
 	'fetch' : '/fetch',
 	'help' : '/help',
 	'homepage' : '/',
+	'logout' : '/logout',
 	'redirect' : '/redirect',
-	'refresh' : '/refresh',
-	'reset' : '/reset'
+	'refresh' : '/refresh'
 };
 
 // application variables
@@ -213,9 +213,9 @@ app.get(app.locals.ep.refresh, hasToken, (req, res) => {
 });
 
 /**
- * Resets the application state by deleting the stored token
+ * Logs out the user by by deleting the stored token
  */
-app.get(app.locals.ep.reset, (req,res) => {
+app.get(app.locals.ep.logout, (req,res) => {
 	// remove the token
 	token.remove();
 	// render home page
@@ -262,6 +262,7 @@ app.get(app.locals.ep.fetch, hasToken, (req,res) => {
 	    		}
 	    		// render results
 			res.render('eoblist', {
+				token: token.json,
 				eobs: eobs
 			});
 	    		break;
@@ -276,6 +277,7 @@ app.get(app.locals.ep.fetch, hasToken, (req,res) => {
 	    		}
 	    		// render results
 			res.render('results', {
+				token: token.json,
 				customHtml: html + table
 			});
 	    		break;
@@ -290,6 +292,7 @@ app.get(app.locals.ep.fetch, hasToken, (req,res) => {
 	    		}
 	    		// render results
 			res.render('results', {
+				token: token.json,
 				customHtml: html + table
 			});
 	    		break;
@@ -304,6 +307,7 @@ app.get(app.locals.ep.fetch, hasToken, (req,res) => {
 	    		}
 	    		// render results
 	    		res.render('results', {
+	    			token: token.json,
 	    			customHtml: html + table
 	    		});
 	    		break;

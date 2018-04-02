@@ -27,8 +27,7 @@ block append content
 		a(class='btn btn-primary btn-info btn-lg' href='fetch?url=' + rurl.patient + '&action=patientRecord') Format Patient Record
 		|&nbsp;
 		a(class='btn btn-primary btn-info btn-lg' href='fetch?url=' + rurl.eob + '&action=benefitBalance') Fetch Benefit Balances
-		h3 Token Actions
-		p
-		a(class='btn btn-primary btn-warning btn-lg' href=ep.refresh) Refresh Token
-		
-		
+		if(token)
+			h3 Token Actions
+			p
+			a(class='btn btn-primary btn-warning btn-lg' href=ep.refresh) Refresh Token
