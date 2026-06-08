@@ -1,3 +1,8 @@
+This repository has been archived and is no longer maintained.
+The code is provided for historical reference and may contain unpatched or unknown
+vulnerabilities.
+It should not be used in production systems.
+
 # BlueButton OAuth Node.js Sample Client Application
 This application demonstrates how to connect to the BlueButton Sandbox using an OAuth client token and retrieve patient data from the server using a secured connection.
 
